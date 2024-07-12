@@ -1,1 +1,56 @@
+Server
+
+const fs = require("fs");
+const  OpenAI = require("openai");
+const openai = new OpenAI();
+const Cors = require('Cors);
+const app = require('express'); //using the express.js framework
+app.use(Cors())
+app.use(express.json())
+
+app.get('/api/transcriptions' , async (req,res) => {
+    try {
+      const transcription = await openai.audio.transcriptions.create({
+        file: fs.createReadStream(req.path),
+        model: "whisper-1",
+      })
+      res.status(200).json({text: transcription.text})
+  } catch(err) {
+      res.status(400).send({error: error})
+  }
+})
+
+app.get('/api/translations' , async (req,res) => {
+    try {
+      const translation = await openai.audio.translations.create({
+        file: fs.createReadStream(req.path),
+        model: "whisper-1",
+      })
+      res.status(200).json({text: transcription.text})
+  } catch(err) {
+      res.status(400).send({error: error})
+  }
+})
+
+Client
+
+import React as 'react'
+import axios from 'axios';
+
+const getTranslatedText = async() => {
+  const url = '/api/translations';
+  const response = axios.get(url);
+  return response.text;
+}
+
+const getTranscriptedText = async() => {
+  const url = '/api/transcriptions';
+  const response = axios.get(url);
+  return response.text;
+}
+
+
+
+
+
 
